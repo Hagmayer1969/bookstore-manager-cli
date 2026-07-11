@@ -3,13 +3,9 @@
     {
       "name": "Default",
       "files": [
-        ".gitignore",
-        "README.md",
-        "package-lock.json",
-        "package.json",
-        "src/main.ts",
+        ".vscode/changelists.json",
         "tsconfig.json",
-        ".vscode/changelists.json"
+        "src/banco/schema.sql"
       ]
     }
   ],
