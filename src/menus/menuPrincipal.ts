@@ -62,37 +62,44 @@ export class MenuPrincipal {
   }
 
   private async menuAutores(): Promise<void> {
-    console.clear();
-    console.log('=== Gerenciar Autores ===');
-    console.log('1. Criar autor');
-    console.log('2. Listar autores');
-    console.log('3. Atualizar autor');
-    console.log('4. Buscar autor por ID');
-    console.log('0. Voltar');
-    console.log('');
+    let voltando = false;
 
-    const opcao = this.prompt('Escolha uma opcao: ');
+    while (!voltando) {
+      console.clear();
+      console.log('=== Gerenciar Autores ===');
+      console.log('1. Criar autor');
+      console.log('2. Listar autores');
+      console.log('3. Atualizar autor');
+      console.log('4. Buscar autor por ID');
+      console.log('0. Voltar');
+      console.log('');
 
-    switch (opcao) {
-      case '1':
-        console.log('Criar autor - Será implementado no DIA 6');
-        break;
-      case '2':
-        console.log('Listar autores - Será implementado no DIA 6');
-        break;
-      case '3':
-        console.log('Atualizar autor - Será implementado no DIA 6');
-        break;
-      case '4':
-        console.log('Buscar autor por ID - Será implementado no DIA 6');
-        break;
-      case '0':
-        return;
-      default:
-        console.log('Opcao invalida.');
+      const opcao = this.prompt('Escolha uma opcao: ');
+
+      switch (opcao) {
+        case '1':
+          await this.autorControlador.criar();
+          break;
+        case '2':
+          await this.autorControlador.listar();
+          break;
+        case '3':
+          await this.autorControlador.atualizar();
+          break;
+        case '4':
+          await this.autorControlador.buscarPorId();
+          break;
+        case '0':
+          voltando = true;
+          break;
+        default:
+          console.log('Opcao invalida.');
+      }
+
+      if (!voltando) {
+        this.prompt('Pressione Enter para continuar...');
+      }
     }
-
-    this.prompt('Pressione Enter para continuar...');
   }
 
   private async menuLivros(): Promise<void> {

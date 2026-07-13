@@ -1,5 +1,5 @@
 export interface Autor {
   id: number;
   nome: string;
-  nacionalidade?: string;
+  nacionalidade?: string | undefined;
 }
