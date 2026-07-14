@@ -3,15 +3,12 @@
     {
       "name": "Default",
       "files": [
-        "package-lock.json",
-        "package.json",
-        "src/menus/menuPrincipal.ts",
+        "src/repositorios/LIvroRepositorio.ts",
         ".vscode/changelists.json",
-        "src/controladores/AutorControlador.ts",
-        "src/controladores/ClienteControlador.ts",
-        "src/controladores/EmprestimoControlador.ts",
+        "src/servicos/LivroServico.ts",
+        "src/repositorios/LivroRepositorio.ts",
         "src/controladores/LivroControlador.ts",
-        "src/main.ts"
+        "src/menus/menuPrincipal.ts"
       ]
     }
   ],

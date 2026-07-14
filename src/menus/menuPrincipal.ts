@@ -79,65 +79,80 @@ export class MenuPrincipal {
       switch (opcao) {
         case '1':
           await this.autorControlador.criar();
+          this.prompt('Pressione Enter para continuar...');
           break;
         case '2':
           await this.autorControlador.listar();
+          this.prompt('Pressione Enter para continuar...');
           break;
         case '3':
           await this.autorControlador.atualizar();
+          this.prompt('Pressione Enter para continuar...');
           break;
         case '4':
           await this.autorControlador.buscarPorId();
+          this.prompt('Pressione Enter para continuar...');
           break;
         case '0':
           voltando = true;
           break;
         default:
           console.log('Opcao invalida.');
-      }
-
-      if (!voltando) {
-        this.prompt('Pressione Enter para continuar...');
+          this.prompt('Pressione Enter para continuar...');
       }
     }
   }
 
   private async menuLivros(): Promise<void> {
-    console.clear();
-    console.log('=== Gerenciar Livros ===');
-    console.log('1. Criar livro');
-    console.log('2. Listar livros');
-    console.log('3. Atualizar livro');
-    console.log('4. Deletar livro');
-    console.log('5. Buscar livro por ID');
-    console.log('0. Voltar');
-    console.log('');
+    let voltando = false;
 
-    const opcao = this.prompt('Escolha uma opcao: ');
+    while (!voltando) {
+      console.clear();
+      console.log('=== Gerenciar Livros ===');
+      console.log('1. Criar livro');
+      console.log('2. Listar livros');
+      console.log('3. Atualizar livro');
+      console.log('4. Buscar livro por ID');
+      console.log('5. Deletar livro');
+      console.log('6. Listar livros por autor');
+      console.log('0. Voltar');
+      console.log('');
 
-    switch (opcao) {
-      case '1':
-        console.log('Criar livro - Será implementado no DIA 7');
-        break;
-      case '2':
-        console.log('Listar livros - Será implementado no DIA 7');
-        break;
-      case '3':
-        console.log('Atualizar livro - Será implementado no DIA 7');
-        break;
-      case '4':
-        console.log('Deletar livro - Será implementado no DIA 7');
-        break;
-      case '5':
-        console.log('Buscar livro por ID - Será implementado no DIA 7');
-        break;
-      case '0':
-        return;
-      default:
-        console.log('Opcao invalida.');
+      const opcao = this.prompt('Escolha uma opcao: ');
+
+      switch (opcao) {
+        case '1':
+          await this.livroControlador.criar();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '2':
+          await this.livroControlador.listar();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '3':
+          await this.livroControlador.atualizar();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '4':
+          await this.livroControlador.buscarPorId();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '5':
+          await this.livroControlador.deletar();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '6':
+          await this.livroControlador.listarPorAutor();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '0':
+          voltando = true;
+          break;
+        default:
+          console.log('Opcao invalida.');
+          this.prompt('Pressione Enter para continuar...');
+      }
     }
-
-    this.prompt('Pressione Enter para continuar...');
   }
 
   private async menuClientes(): Promise<void> {
