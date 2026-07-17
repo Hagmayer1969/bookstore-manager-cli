@@ -82,6 +82,22 @@ export class EmprestimoRepositorio {
     return resultado.rows.map(row => this.mapearDoBanco(row));
   }
 
+  async contarPorLivro(livroId: number): Promise<number> {
+    const resultado = await pool.query(
+      'SELECT COUNT(*)::int AS total FROM emprestimos WHERE livro_id = $1',
+      [livroId]
+    );
+    return resultado.rows[0].total;
+  }
+
+  async contarPorCliente(clienteId: number): Promise<number> {
+    const resultado = await pool.query(
+      'SELECT COUNT(*)::int AS total FROM emprestimos WHERE cliente_id = $1',
+      [clienteId]
+    );
+    return resultado.rows[0].total;
+  }
+
   private mapearDoBanco(row: any): Emprestimo {
     return {
       id: row.id,

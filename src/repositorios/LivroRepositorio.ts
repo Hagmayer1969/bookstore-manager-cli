@@ -42,6 +42,15 @@ export class LivroRepositorio {
     }
   }
 
+  // LOWER() para que "Dom Casmurro" e "dom casmurro" do mesmo autor colidam.
+  async buscarPorTituloEAutor(titulo: string, autorId: number): Promise<Livro | null> {
+    const resultado = await pool.query(
+      'SELECT * FROM livros WHERE LOWER(titulo) = LOWER($1) AND autor_id = $2',
+      [titulo, autorId]
+    );
+    return resultado.rows.length > 0 ? this.mapearDoBanco(resultado.rows[0]) : null;
+  }
+
   async buscarPorAutor(autorId: number): Promise<Livro[]> {
     const resultado = await pool.query('SELECT * FROM livros WHERE autor_id = $1 ORDER BY titulo', [autorId]);
     return resultado.rows.map(row => this.mapearDoBanco(row));

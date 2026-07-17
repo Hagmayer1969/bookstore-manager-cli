@@ -34,4 +34,13 @@ export class AutorRepositorio {
     }
     return resultado.rows[0];
   }
+
+  // LOWER() para que "Machado de Assis" e "machado de assis" sejam o mesmo autor.
+  async buscarPorNome(nome: string): Promise<Autor | null> {
+    const resultado = await pool.query(
+      'SELECT * FROM autores WHERE LOWER(nome) = LOWER($1)',
+      [nome]
+    );
+    return resultado.rows.length > 0 ? resultado.rows[0] : null;
+  }
 }

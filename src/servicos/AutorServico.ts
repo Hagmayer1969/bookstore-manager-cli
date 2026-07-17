@@ -9,8 +9,10 @@ export class AutorServico {
   }
 
   async criar(autor: Autor): Promise<Autor> {
-    this.validar(autor);
-    return await this.autorRepositorio.criar(autor);
+    const autorNormalizado = this.normalizar(autor);
+    this.validar(autorNormalizado);
+    await this.validarNomeUnico(autorNormalizado.nome);
+    return await this.autorRepositorio.criar(autorNormalizado);
   }
 
   async listar(): Promise<Autor[]> {
@@ -21,8 +23,10 @@ export class AutorServico {
     if (!id || id <= 0) {
       throw new Error('ID invalido');
     }
-    this.validar(autor);
-    return await this.autorRepositorio.atualizar(id, autor);
+    const autorNormalizado = this.normalizar(autor);
+    this.validar(autorNormalizado);
+    await this.validarNomeUnico(autorNormalizado.nome, id);
+    return await this.autorRepositorio.atualizar(id, autorNormalizado);
   }
 
   async buscarPorId(id: number): Promise<Autor> {
@@ -30,6 +34,24 @@ export class AutorServico {
       throw new Error('ID invalido');
     }
     return await this.autorRepositorio.buscarPorId(id);
+  }
+
+  // Remove espacos das pontas antes de validar e gravar: sem isso
+  // "machado de assis" e "machado de assis " viram autores distintos.
+  private normalizar(autor: Autor): Autor {
+    return {
+      ...autor,
+      nome: (autor.nome ?? '').trim(),
+      nacionalidade: autor.nacionalidade?.trim(),
+    };
+  }
+
+  private async validarNomeUnico(nome: string, idIgnorado?: number): Promise<void> {
+    const existente = await this.autorRepositorio.buscarPorNome(nome);
+
+    if (existente && existente.id !== idIgnorado) {
+      throw new Error(`Ja existe um autor cadastrado com o nome "${nome}"`);
+    }
   }
 
   private validar(autor: Autor): void {
