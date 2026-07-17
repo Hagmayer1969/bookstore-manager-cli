@@ -3,5 +3,5 @@ export interface Emprestimo {
   livroId: number;
   clienteId: number;
   dataEmprestimo: Date;
-  dataDevolucao?: Date;
+  dataDevolucao: Date | null;
 }

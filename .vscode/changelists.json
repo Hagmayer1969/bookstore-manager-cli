@@ -3,12 +3,12 @@
     {
       "name": "Default",
       "files": [
-        "src/repositorios/ClienteRepositorio.ts",
+        "src/repositorios/EmprestimoRepositorio.ts",
         ".vscode/changelists.json",
-        "src/servicos/ClienteServico.ts",
-        "src/controladores/ClienteControlador.ts",
+        "src/servicos/EmprestimoServico.ts",
+        "src/controladores/EmprestimoControlador.ts",
         "src/menus/menuPrincipal.ts",
-        "src/main.ts"
+        "src/modelos/Emprestimo.ts"
       ]
     }
   ],

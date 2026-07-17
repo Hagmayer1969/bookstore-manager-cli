@@ -2,18 +2,21 @@ import promptSync from 'prompt-sync';
 import { AutorControlador } from '../controladores/AutorControlador';
 import { LivroControlador } from '../controladores/LivroControlador';
 import { ClienteControlador } from '../controladores/ClienteControlador';
+import { EmprestimoControlador } from '../controladores/EmprestimoControlador';
 
 export class MenuPrincipal {
   private prompt: ReturnType<typeof promptSync>;
   private autorControlador: AutorControlador;
   private livroControlador: LivroControlador;
   private clienteControlador: ClienteControlador;
+  private emprestimoControlador: EmprestimoControlador;
 
   constructor() {
     this.prompt = promptSync();
     this.autorControlador = new AutorControlador();
     this.livroControlador = new LivroControlador();
     this.clienteControlador = new ClienteControlador();
+    this.emprestimoControlador = new EmprestimoControlador();
   }
 
   private async menuAutores(): Promise<void> {
@@ -148,6 +151,50 @@ export class MenuPrincipal {
     }
   }
 
+  private async menuEmprestimos(): Promise<void> {
+    let voltando = false;
+
+    while (!voltando) {
+      console.log('\n=== Menu Emprestimos ===\n');
+      console.log('1. Emprestar livro');
+      console.log('2. Devolver livro');
+      console.log('3. Listar todos os emprestimos');
+      console.log('4. Buscar emprestimo por ID');
+      console.log('5. Listar emprestimos ativos');
+      console.log('0. Voltar\n');
+
+      const opcao = this.prompt('Escolha uma opcao: ');
+
+      switch (opcao) {
+        case '1':
+          await this.emprestimoControlador.emprestar();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '2':
+          await this.emprestimoControlador.devolver();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '3':
+          await this.emprestimoControlador.listar();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '4':
+          await this.emprestimoControlador.buscarPorId();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '5':
+          await this.emprestimoControlador.listarAtivos();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '0':
+          voltando = true;
+          break;
+        default:
+          console.log('\nOpcao invalida. Tente novamente.\n');
+      }
+    }
+  }
+
   async executar(): Promise<void> {
     let saindo = false;
 
@@ -156,6 +203,7 @@ export class MenuPrincipal {
       console.log('1. Autores');
       console.log('2. Livros');
       console.log('3. Clientes');
+      console.log('4. Emprestimos');
       console.log('0. Sair\n');
 
       const opcao = this.prompt('Escolha uma opcao: ');
@@ -169,6 +217,9 @@ export class MenuPrincipal {
           break;
         case '3':
           await this.menuClientes();
+          break;
+        case '4':
+          await this.menuEmprestimos();
           break;
         case '0':
           console.log('Saindo...');
