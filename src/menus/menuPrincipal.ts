@@ -3,6 +3,7 @@ import { AutorControlador } from '../controladores/AutorControlador';
 import { LivroControlador } from '../controladores/LivroControlador';
 import { ClienteControlador } from '../controladores/ClienteControlador';
 import { EmprestimoControlador } from '../controladores/EmprestimoControlador';
+import { RelatorioControlador } from '../controladores/RelatorioControlador';
 
 export class MenuPrincipal {
   private prompt: ReturnType<typeof promptSync>;
@@ -10,6 +11,7 @@ export class MenuPrincipal {
   private livroControlador: LivroControlador;
   private clienteControlador: ClienteControlador;
   private emprestimoControlador: EmprestimoControlador;
+  private relatorioControlador: RelatorioControlador;
 
   constructor() {
     this.prompt = promptSync();
@@ -17,6 +19,7 @@ export class MenuPrincipal {
     this.livroControlador = new LivroControlador();
     this.clienteControlador = new ClienteControlador();
     this.emprestimoControlador = new EmprestimoControlador();
+    this.relatorioControlador = new RelatorioControlador();
   }
 
   private async menuAutores(): Promise<void> {
@@ -195,6 +198,70 @@ export class MenuPrincipal {
     }
   }
 
+  private async menuRelatorios(): Promise<void> {
+    let voltando = false;
+
+    while (!voltando) {
+      console.log('\n=== Menu Relatorios ===\n');
+      console.log('1. Livros disponiveis');
+      console.log('2. Livros emprestados');
+      console.log('3. Livros cadastrados por autor');
+      console.log('4. Quantidade de emprestimos por livro');
+      console.log('5. Clientes com emprestimos ativos');
+      console.log('6. Resumo geral do sistema');
+      console.log('7. Top 5 livros mais emprestados');
+      console.log('8. Top 5 clientes mais ativos');
+      console.log('9. Livros esgotados (quantidade zero)');
+      console.log('0. Voltar\n');
+
+      const opcao = this.prompt('Escolha uma opcao: ');
+
+      switch (opcao) {
+        case '1':
+          await this.relatorioControlador.livrosDisponiveis();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '2':
+          await this.relatorioControlador.livrosEmprestados();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '3':
+          await this.relatorioControlador.livrosPorAutor();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '4':
+          await this.relatorioControlador.emprestimosPorLivro();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '5':
+          await this.relatorioControlador.clientesComEmprestimosAtivos();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '6':
+          await this.relatorioControlador.resumoGeral();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '7':
+          await this.relatorioControlador.livrosMaisEmprestados();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '8':
+          await this.relatorioControlador.clientesMaisAtivos();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '9':
+          await this.relatorioControlador.livrosComQuantidadeZero();
+          this.prompt('Pressione Enter para continuar...');
+          break;
+        case '0':
+          voltando = true;
+          break;
+        default:
+          console.log('\nOpcao invalida. Tente novamente.\n');
+      }
+    }
+  }
+
   async executar(): Promise<void> {
     let saindo = false;
 
@@ -204,6 +271,7 @@ export class MenuPrincipal {
       console.log('2. Livros');
       console.log('3. Clientes');
       console.log('4. Emprestimos');
+      console.log('5. Relatorios');
       console.log('0. Sair\n');
 
       const opcao = this.prompt('Escolha uma opcao: ');
@@ -220,6 +288,9 @@ export class MenuPrincipal {
           break;
         case '4':
           await this.menuEmprestimos();
+          break;
+        case '5':
+          await this.menuRelatorios();
           break;
         case '0':
           console.log('Saindo...');

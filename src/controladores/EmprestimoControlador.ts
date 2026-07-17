@@ -1,6 +1,7 @@
 import promptSync from 'prompt-sync';
 import { Emprestimo } from '../modelos/Emprestimo';
 import { EmprestimoServico } from '../servicos/EmprestimoServico';
+import { converterStringParaDate, formatarDataParaExibicao } from '../utilitarios/DataUtil';
 
 export class EmprestimoControlador {
   private prompt: ReturnType<typeof promptSync>;
@@ -32,11 +33,7 @@ export class EmprestimoControlador {
       }
 
       const dataEmprestimoStr = this.prompt('Digite a data do emprestimo (YYYY-MM-DD): ');
-      const dataEmprestimo = this.converterStringParaDate(dataEmprestimoStr);
-
-      if (!dataEmprestimo) {
-        return;
-      }
+      const dataEmprestimo = converterStringParaDate(dataEmprestimoStr);
 
       const novoEmprestimo: Emprestimo = {
         id: 0,
@@ -51,7 +48,7 @@ export class EmprestimoControlador {
       console.log(`ID: ${emprestimoRealizado.id}`);
       console.log(`Livro ID: ${emprestimoRealizado.livroId}`);
       console.log(`Cliente ID: ${emprestimoRealizado.clienteId}`);
-      console.log(`Data de Emprestimo: ${this.formatarDataParaExibicao(emprestimoRealizado.dataEmprestimo)}\n`);
+      console.log(`Data de Emprestimo: ${formatarDataParaExibicao(emprestimoRealizado.dataEmprestimo)}\n`);
     } catch (erro) {
       console.error(`\nErro ao emprestar livro: ${(erro as Error).message}\n`);
     }
@@ -70,16 +67,12 @@ export class EmprestimoControlador {
       }
 
       const dataDevolucaoStr = this.prompt('Digite a data da devolucao (YYYY-MM-DD): ');
-      const dataDevolucao = this.converterStringParaDate(dataDevolucaoStr);
-
-      if (!dataDevolucao) {
-        return;
-      }
+      const dataDevolucao = converterStringParaDate(dataDevolucaoStr);
 
       const emprestimoDevolvido = await this.emprestimoServico.devolver(emprestimoId, dataDevolucao);
       console.log(`\nDevolucao realizada com sucesso!`);
       console.log(`ID: ${emprestimoDevolvido.id}`);
-      console.log(`Data de Devolucao: ${this.formatarDataParaExibicao(emprestimoDevolvido.dataDevolucao!)}\n`);
+      console.log(`Data de Devolucao: ${formatarDataParaExibicao(emprestimoDevolvido.dataDevolucao!)}\n`);
     } catch (erro) {
       console.error(`\nErro ao devolver livro: ${(erro as Error).message}\n`);
     }
@@ -98,10 +91,10 @@ export class EmprestimoControlador {
 
       emprestimos.forEach((emprestimo, index) => {
         const statusDevolucao = emprestimo.dataDevolucao
-          ? `Devolvido em ${this.formatarDataParaExibicao(emprestimo.dataDevolucao)}`
+          ? `Devolvido em ${formatarDataParaExibicao(emprestimo.dataDevolucao)}`
           : 'Ativo (nao devolvido)';
         console.log(
-          `${index + 1}. Livro ID: ${emprestimo.livroId}, Cliente ID: ${emprestimo.clienteId}, Emprestimo: ${this.formatarDataParaExibicao(emprestimo.dataEmprestimo)}, ${statusDevolucao}`
+          `${index + 1}. Livro ID: ${emprestimo.livroId}, Cliente ID: ${emprestimo.clienteId}, Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}, ${statusDevolucao}`
         );
       });
       console.log('');
@@ -127,8 +120,8 @@ export class EmprestimoControlador {
       console.log(`ID: ${emprestimo.id}`);
       console.log(`Livro ID: ${emprestimo.livroId}`);
       console.log(`Cliente ID: ${emprestimo.clienteId}`);
-      console.log(`Data de Emprestimo: ${this.formatarDataParaExibicao(emprestimo.dataEmprestimo)}`);
-      console.log(`Data de Devolucao: ${emprestimo.dataDevolucao ? this.formatarDataParaExibicao(emprestimo.dataDevolucao) : 'Nao devolvido ainda'}\n`);
+      console.log(`Data de Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}`);
+      console.log(`Data de Devolucao: ${emprestimo.dataDevolucao ? formatarDataParaExibicao(emprestimo.dataDevolucao) : 'Nao devolvido ainda'}\n`);
     } catch (erro) {
       console.error(`\nErro ao buscar emprestimo: ${(erro as Error).message}\n`);
     }
@@ -147,7 +140,7 @@ export class EmprestimoControlador {
 
       emprestimos.forEach((emprestimo, index) => {
         console.log(
-          `${index + 1}. Livro ID: ${emprestimo.livroId}, Cliente ID: ${emprestimo.clienteId}, Emprestimo: ${this.formatarDataParaExibicao(emprestimo.dataEmprestimo)}`
+          `${index + 1}. Livro ID: ${emprestimo.livroId}, Cliente ID: ${emprestimo.clienteId}, Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}`
         );
       });
       console.log('');
@@ -156,41 +149,5 @@ export class EmprestimoControlador {
     }
   }
 
-  private converterStringParaDate(dataStr: string): Date | null {
-    if (!dataStr || dataStr.trim() === '') {
-      console.error('\nData eh obrigatoria.\n');
-      return null;
-    }
 
-    const partes = dataStr.trim().split('-');
-    if (partes.length !== 3) {
-      console.error('\nData deve estar no formato YYYY-MM-DD (exemplo: 2026-07-15).\n');
-      return null;
-    }
-
-    const ano = Number(partes[0]);
-    const mes = Number(partes[1]);
-    const dia = Number(partes[2]);
-
-    // new Date(ano, mes, dia) transborda em vez de rejeitar: mes 13 vira janeiro
-    // do ano seguinte. Conferir as partes de volta descarta essas datas.
-    const dataObj = new Date(ano, mes - 1, dia);
-    if (
-      dataObj.getFullYear() !== ano ||
-      dataObj.getMonth() !== mes - 1 ||
-      dataObj.getDate() !== dia
-    ) {
-      console.error('\nData invalida.\n');
-      return null;
-    }
-
-    return dataObj;
-  }
-
-  private formatarDataParaExibicao(data: Date): string {
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-  }
 }
