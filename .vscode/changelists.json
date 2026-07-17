@@ -3,12 +3,12 @@
     {
       "name": "Default",
       "files": [
-        "src/repositorios/LIvroRepositorio.ts",
+        "src/repositorios/ClienteRepositorio.ts",
         ".vscode/changelists.json",
-        "src/servicos/LivroServico.ts",
-        "src/repositorios/LivroRepositorio.ts",
-        "src/controladores/LivroControlador.ts",
-        "src/menus/menuPrincipal.ts"
+        "src/servicos/ClienteServico.ts",
+        "src/controladores/ClienteControlador.ts",
+        "src/menus/menuPrincipal.ts",
+        "src/main.ts"
       ]
     }
   ],
