@@ -193,6 +193,8 @@ bookstore-manager-cli/
 │   │   └── Relatorio.ts
 │   └── utilitarios/
 │       └── DataUtil.ts          conversão e formatação de datas
+├── docs/
+│   └── diagrama-er.png          diagrama entidade-relacionamento do banco
 ├── .env.example
 ├── .gitignore
 ├── package.json
@@ -216,6 +218,20 @@ autores (1) ----< livros (1) ----< emprestimos >---- (1) clientes
 | emprestimos | id (PK), livro_id (FK livros), cliente_id (FK clientes), data_emprestimo, data_devolucao |
 
 `data_devolucao` fica nula enquanto o livro não voltar. É esse campo que separa um empréstimo ativo de um já encerrado.
+
+### Diagrama ER
+
+Diagrama gerado no pgAdmin a partir do banco `bookstore`, mostrando as quatro tabelas, seus tipos, as chaves primárias (PK) e estrangeiras (FK) e os relacionamentos:
+
+![Diagrama Entidade-Relacionamento do banco bookstore](docs/diagrama-er.png)
+
+Os relacionamentos são todos de um-para-muitos:
+
+- **autores → livros** — um autor pode ter vários livros (`livros.autor_id` referencia `autores.id`)
+- **livros → emprestimos** — um livro pode aparecer em vários empréstimos (`emprestimos.livro_id` referencia `livros.id`)
+- **clientes → emprestimos** — um cliente pode ter vários empréstimos (`emprestimos.cliente_id` referencia `clientes.id`)
+
+A tabela `emprestimos` é a que associa livros e clientes, registrando cada operação de empréstimo e devolução.
 
 ## Exemplos de utilização
 
