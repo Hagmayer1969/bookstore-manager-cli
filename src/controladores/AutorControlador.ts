@@ -45,8 +45,8 @@ export class AutorControlador {
         return;
       }
 
-      autores.forEach((autor, index) => {
-        console.log(`${index + 1}. ${autor.nome} (${autor.nacionalidade || 'Sem nacionalidade'})`);
+      autores.forEach((autor) => {
+        console.log(`ID ${autor.id} | ${autor.nome} (${autor.nacionalidade || 'Sem nacionalidade'})`);
       });
       console.log('');
     } catch (erro) {

@@ -44,7 +44,7 @@ export class LivroControlador {
       console.log(`\nLivro criado com sucesso!`);
       console.log(`ID: ${livroCriado.id}`);
       console.log(`Titulo: ${livroCriado.titulo}`);
-      console.log(`Autor ID: ${livroCriado.autorId}`);
+      console.log(`Autor: ${livroCriado.autorNome}`);
       console.log(`Quantidade: ${livroCriado.quantidadeDisponivel}\n`);
     } catch (erro) {
       console.error(`\nErro ao criar livro: ${(erro as Error).message}\n`);
@@ -62,8 +62,8 @@ export class LivroControlador {
         return;
       }
 
-      livros.forEach((livro, index) => {
-        console.log(`${index + 1}. ${livro.titulo} (Autor ID: ${livro.autorId}, Quantidade: ${livro.quantidadeDisponivel})`);
+      livros.forEach((livro) => {
+        console.log(`ID ${livro.id} | ${livro.titulo} (Autor: ${livro.autorNome}, Quantidade: ${livro.quantidadeDisponivel})`);
       });
       console.log('');
     } catch (erro) {
@@ -110,7 +110,7 @@ export class LivroControlador {
       const resultado = await this.livroServico.atualizar(id, livroAtualizado);
       console.log(`\nLivro atualizado com sucesso!`);
       console.log(`Titulo: ${resultado.titulo}`);
-      console.log(`Autor ID: ${resultado.autorId}`);
+      console.log(`Autor: ${resultado.autorNome}`);
       console.log(`Quantidade: ${resultado.quantidadeDisponivel}\n`);
     } catch (erro) {
       console.error(`\nErro ao atualizar livro: ${(erro as Error).message}\n`);
@@ -133,7 +133,7 @@ export class LivroControlador {
       console.log(`\nLivro encontrado:`);
       console.log(`ID: ${livro.id}`);
       console.log(`Titulo: ${livro.titulo}`);
-      console.log(`Autor ID: ${livro.autorId}`);
+      console.log(`Autor: ${livro.autorNome}`);
       console.log(`Quantidade: ${livro.quantidadeDisponivel}\n`);
     } catch (erro) {
       console.error(`\nErro ao buscar livro: ${(erro as Error).message}\n`);
@@ -185,8 +185,8 @@ export class LivroControlador {
         return;
       }
 
-      livros.forEach((livro, index) => {
-        console.log(`${index + 1}. ${livro.titulo} (Autor ID: ${livro.autorId}, Quantidade: ${livro.quantidadeDisponivel})`);
+      livros.forEach((livro) => {
+        console.log(`ID ${livro.id} | ${livro.titulo} (Autor: ${livro.autorNome}, Quantidade: ${livro.quantidadeDisponivel})`);
       });
       console.log('');
     } catch (erro) {

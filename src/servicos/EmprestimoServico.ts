@@ -78,9 +78,8 @@ export class EmprestimoServico {
   }
 
   private async validarLivroExiste(livroId: number): Promise<void> {
-    try {
-      await this.livroRepositorio.buscarPorId(livroId);
-    } catch (erro) {
+    const existe = await this.livroRepositorio.existePorId(livroId);
+    if (!existe) {
       throw new Error(`Livro com id ${livroId} nao existe`);
     }
   }

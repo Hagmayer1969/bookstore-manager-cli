@@ -46,8 +46,8 @@ export class EmprestimoControlador {
       const emprestimoRealizado = await this.emprestimoServico.emprestar(novoEmprestimo);
       console.log(`\nEmprestimo realizado com sucesso!`);
       console.log(`ID: ${emprestimoRealizado.id}`);
-      console.log(`Livro ID: ${emprestimoRealizado.livroId}`);
-      console.log(`Cliente ID: ${emprestimoRealizado.clienteId}`);
+      console.log(`Livro: ${emprestimoRealizado.livroTitulo}`);
+      console.log(`Cliente: ${emprestimoRealizado.clienteNome}`);
       console.log(`Data de Emprestimo: ${formatarDataParaExibicao(emprestimoRealizado.dataEmprestimo)}\n`);
     } catch (erro) {
       console.error(`\nErro ao emprestar livro: ${(erro as Error).message}\n`);
@@ -89,12 +89,12 @@ export class EmprestimoControlador {
         return;
       }
 
-      emprestimos.forEach((emprestimo, index) => {
+      emprestimos.forEach((emprestimo) => {
         const statusDevolucao = emprestimo.dataDevolucao
           ? `Devolvido em ${formatarDataParaExibicao(emprestimo.dataDevolucao)}`
           : 'Ativo (nao devolvido)';
         console.log(
-          `${index + 1}. Livro ID: ${emprestimo.livroId}, Cliente ID: ${emprestimo.clienteId}, Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}, ${statusDevolucao}`
+          `ID ${emprestimo.id} | Livro: ${emprestimo.livroTitulo}, Cliente: ${emprestimo.clienteNome}, Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}, ${statusDevolucao}`
         );
       });
       console.log('');
@@ -118,8 +118,8 @@ export class EmprestimoControlador {
       const emprestimo = await this.emprestimoServico.buscarPorId(id);
       console.log(`\nEmprestimo encontrado:`);
       console.log(`ID: ${emprestimo.id}`);
-      console.log(`Livro ID: ${emprestimo.livroId}`);
-      console.log(`Cliente ID: ${emprestimo.clienteId}`);
+      console.log(`Livro: ${emprestimo.livroTitulo}`);
+      console.log(`Cliente: ${emprestimo.clienteNome}`);
       console.log(`Data de Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}`);
       console.log(`Data de Devolucao: ${emprestimo.dataDevolucao ? formatarDataParaExibicao(emprestimo.dataDevolucao) : 'Nao devolvido ainda'}\n`);
     } catch (erro) {
@@ -138,9 +138,9 @@ export class EmprestimoControlador {
         return;
       }
 
-      emprestimos.forEach((emprestimo, index) => {
+      emprestimos.forEach((emprestimo) => {
         console.log(
-          `${index + 1}. Livro ID: ${emprestimo.livroId}, Cliente ID: ${emprestimo.clienteId}, Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}`
+          `ID ${emprestimo.id} | Livro: ${emprestimo.livroTitulo}, Cliente: ${emprestimo.clienteNome}, Emprestimo: ${formatarDataParaExibicao(emprestimo.dataEmprestimo)}`
         );
       });
       console.log('');

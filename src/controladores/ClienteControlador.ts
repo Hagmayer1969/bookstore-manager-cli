@@ -45,8 +45,8 @@ export class ClienteControlador {
         return;
       }
 
-      clientes.forEach((cliente, index) => {
-        console.log(`${index + 1}. ${cliente.nome} (${cliente.email})`);
+      clientes.forEach((cliente) => {
+        console.log(`ID ${cliente.id} | ${cliente.nome} (${cliente.email})`);
       });
       console.log('');
     } catch (erro) {
