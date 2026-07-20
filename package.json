@@ -1,8 +1,8 @@
 {
   "name": "bookstore-manager-cli",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "CLI de gerenciamento de livraria em Node.js + TypeScript + PostgreSQL",
+  "main": "src/main.ts",
   "scripts": {
     "dev": "ts-node-dev src/main.ts",
     "build": "tsc"
@@ -13,11 +13,13 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "pg": "^8.22.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^6.0.3"
+    "prompt-sync": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "@types/pg": "^8.20.0"
+    "@types/pg": "^8.20.0",
+    "@types/prompt-sync": "^4.2.3",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
   }
 }
