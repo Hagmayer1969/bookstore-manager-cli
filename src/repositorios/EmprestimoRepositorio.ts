@@ -9,7 +9,15 @@ export class EmprestimoRepositorio {
       await client.query('BEGIN');
 
       const resultadoEmprestimo = await client.query(
-        'INSERT INTO emprestimos (livro_id, cliente_id, data_emprestimo, data_devolucao) VALUES ($1, $2, $3, $4) RETURNING *',
+        `WITH novo AS (
+           INSERT INTO emprestimos (livro_id, cliente_id, data_emprestimo, data_devolucao)
+           VALUES ($1, $2, $3, $4)
+           RETURNING *
+         )
+         SELECT novo.*, l.titulo AS livro_titulo, c.nome AS cliente_nome
+         FROM novo
+         JOIN livros l ON novo.livro_id = l.id
+         JOIN clientes c ON novo.cliente_id = c.id`,
         [emprestimo.livroId, emprestimo.clienteId, emprestimo.dataEmprestimo, emprestimo.dataDevolucao]
       );
 
@@ -65,12 +73,25 @@ export class EmprestimoRepositorio {
   }
 
   async listar(): Promise<Emprestimo[]> {
-    const resultado = await pool.query('SELECT * FROM emprestimos ORDER BY data_emprestimo DESC');
+    const resultado = await pool.query(
+      `SELECT e.*, l.titulo AS livro_titulo, c.nome AS cliente_nome
+       FROM emprestimos e
+       JOIN livros l ON e.livro_id = l.id
+       JOIN clientes c ON e.cliente_id = c.id
+       ORDER BY e.data_emprestimo DESC`
+    );
     return resultado.rows.map(row => this.mapearDoBanco(row));
   }
 
   async buscarPorId(id: number): Promise<Emprestimo> {
-    const resultado = await pool.query('SELECT * FROM emprestimos WHERE id = $1', [id]);
+    const resultado = await pool.query(
+      `SELECT e.*, l.titulo AS livro_titulo, c.nome AS cliente_nome
+       FROM emprestimos e
+       JOIN livros l ON e.livro_id = l.id
+       JOIN clientes c ON e.cliente_id = c.id
+       WHERE e.id = $1`,
+      [id]
+    );
     if (resultado.rows.length === 0) {
       throw new Error(`Emprestimo com id ${id} nao encontrado`);
     }
@@ -78,7 +99,14 @@ export class EmprestimoRepositorio {
   }
 
   async listarAtivos(): Promise<Emprestimo[]> {
-    const resultado = await pool.query('SELECT * FROM emprestimos WHERE data_devolucao IS NULL ORDER BY data_emprestimo DESC');
+    const resultado = await pool.query(
+      `SELECT e.*, l.titulo AS livro_titulo, c.nome AS cliente_nome
+       FROM emprestimos e
+       JOIN livros l ON e.livro_id = l.id
+       JOIN clientes c ON e.cliente_id = c.id
+       WHERE e.data_devolucao IS NULL
+       ORDER BY e.data_emprestimo DESC`
+    );
     return resultado.rows.map(row => this.mapearDoBanco(row));
   }
 
@@ -105,6 +133,9 @@ export class EmprestimoRepositorio {
       clienteId: row.cliente_id,
       dataEmprestimo: row.data_emprestimo,
       dataDevolucao: row.data_devolucao,
+      // Presentes so quando a consulta faz JOIN com livros e clientes.
+      livroTitulo: row.livro_titulo,
+      clienteNome: row.cliente_nome,
     };
   }
 }
